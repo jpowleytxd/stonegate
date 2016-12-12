@@ -12,10 +12,25 @@ For All:
 
 $imageBlock = file_get_contents("flares/_defaults/image.html");
 
-foreach (glob("*/templates/*.html") as $filename) {
+foreach (glob("*/templates/*_branded.html") as $filename) {
   $template = file_get_contents($filename);
 
   $template = preg_replace('/\{.*?\}/ms', '', $template);
+
+  $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
+
+  $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $imageBlock . "<!-- User Content: Main Content End -->", $template);
+
+  $filename = preg_replace('/.*?\/.*?\//', '', $filename);
+  $filename = str_replace('.html', '', $filename);
+
+  print_r($output);
+
+  $outputPath = "pre_made/branded_belly_band/";
+  $append = "_belly_band";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $filename . $append . $fileType), $output);
 }
 
  ?>
