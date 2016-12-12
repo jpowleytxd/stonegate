@@ -11,6 +11,7 @@ For All:
 */
 
 $imageBlock = file_get_contents("flares/_defaults/image.html");
+$imageBlock = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/eb_placeholder.jpg', $imageBlock);
 
 foreach (glob("*/templates/*_branded.html") as $filename) {
   $template = file_get_contents($filename);
