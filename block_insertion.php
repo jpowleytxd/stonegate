@@ -26,7 +26,7 @@
       //echo $upperName . '<br/>';
 
       $sql .= "INSERT INTO `tbl_template_editor_blocks` (`block_name`, `block_account_id`, `block_type_id`, `block_type`, `block_html`, `block_category`) VALUES
-              ('" . $upperName . "', '1222', 'stonegate_" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $upperName . "');"  . "<br/><br/>";
+              ('" . $folder . "', '1222', 'stonegate_" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $upperName . "');"  . "<br/><br/>";
 
       //$file = 'compiled/blocks/' . $lowerName . '.txt';
       //file_put_contents($file, $sql);
