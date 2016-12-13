@@ -27,7 +27,7 @@ foreach (glob("*/templates/*_branded.html") as $filename) {
   print_r($block);
   print_r($output . "</br>");
 
-  file_put_contents(($output), $block);
+  //file_put_contents(($output), $block);
 }
 
  ?>
