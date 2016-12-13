@@ -31,6 +31,7 @@ foreach (glob("*/templates/*_branded.html") as $filename) {
   $append = "_belly_band";
   $fileType=".html";
 
+  print_r($outputPath . $filename . $append . $fileType);
   file_put_contents(($outputPath . $filename . $append . $fileType), $output);
 }
 
