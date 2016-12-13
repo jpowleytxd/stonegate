@@ -15,6 +15,10 @@
       // echo $filename . '<br/>';
       //echo $folder . '<br/>';
 
+      $category = preg_replace('/(.*?\/.*?\/.*?)(_branded|_venue)(.html)/', '$2', $filename);
+      $category = str_replace('_', ' ', $category);
+      $catCaps = ucwords($category);
+
       $filename = preg_replace('/.*?\/.*?\//', '', $filename);
       $filename = str_replace('.html', '', $filename);
       $lowerName = $filename;
