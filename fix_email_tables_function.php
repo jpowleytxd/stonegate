@@ -14,7 +14,7 @@ foreach(glob("*/*/*.html") as $filename){
 	$templateOut = fixEmailTables($templateIn);
 
 	$outputPath = $topFolder . '/' . $midFolder . '/' . $filename . $fileType;
-	//print_r($outputPath);
+	print_r($outputPath . '<br/>');
 	file_put_contents($outputPath, $templateOut);
 }
 
