@@ -11,9 +11,10 @@
 
       $temp = base64_encode($temp);
 
-      $category = preg_replace('/(.*?\/.*?\/.*?)(_branded|_venue)(.html)/', '$2', $filename);
-      $category = str_replace('_', ' ', $category);
+      $category = preg_replace('/(.*?)\/(.*?)\/(.*?).html/', '$2', $filename);
+      $category = str_replace('_belly_band', ' ', $category);
       $catCaps = ucwords($category);
+      //print_r($catCaps . "<br/>");
 
       $filename = preg_replace('/.*?\/.*?/', '', $filename);
       $filename = str_replace('.html', '', $filename);
@@ -32,7 +33,7 @@
 
 
     }
-     echo $sql . "<br/>";
+    echo $sql . "<br/>";
     //
     // $outputPath = "inserts/";
     // $append = "belly_band";
