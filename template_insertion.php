@@ -23,7 +23,7 @@
       //echo $name . '<br/>';
 
       $sql .= "INSERT INTO `tbl_template_editor_templates` (`template_account_id`, `template_name`, `template_subject`, `template_html`, `template_text`, `template_created_datetime`, `template_type`, `template_image`, `template_status`) VALUES
-              ('1222', '" . $name . "', NULL, '" . $temp . "', NULL, NULL, " . $catCaps . ", NULL, '1');" . '<br/><br/>';
+              ('1222', '" . $name . "', NULL, '" . $temp . "', NULL, NULL, '" . $catCaps . "', NULL, '1');" . '<br/><br/>';
 
       //$file = 'compiled/templates/'.$name.'.txt';
       //file_put_contents($file,$sql);
