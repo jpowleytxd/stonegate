@@ -1,5 +1,5 @@
 <?php
-function belly_band_insertion(){
+//function belly_band_insertion(){
   // $dir = '/templates/*/templates/';
   $sql = null;
   foreach (glob("pre_made/*_belly_band/*.html") as $filename) {
@@ -26,19 +26,22 @@ function belly_band_insertion(){
       //echo $name . '<br/>';
 
       $sql .= "INSERT INTO `tbl_template_editor_templates` (`template_account_id`, `template_name`, `template_subject`, `template_html`, `template_text`, `template_created_datetime`, `template_type`, `template_image`, `template_status`) VALUES
-              ('1222', '" . $name . "', NULL, '" . $temp . "', NULL, NULL, '" . $catCaps . "', NULL, '1');" . PHP_EOL;
+              ('1222', '" . $name . "', NULL, '" . $temp . "', NULL, NULL, '" . $catCaps . "', NULL, '1');" . "<br/><br/>";
 
-      $file = 'inserts/belly_band.txt';
-      file_put_contents($file,$sql);
+      // $sql .= "INSERT INTO `tbl_template_editor_templates` (`template_account_id`, `template_name`, `template_subject`, `template_html`, `template_text`, `template_created_datetime`, `template_type`, `template_image`, `template_status`) VALUES
+      //         ('1222', '" . $name . "', NULL, '" . $temp . "', NULL, NULL, '" . $catCaps . "', NULL, '1');" . PHP_EOL;
+      //
+      // $file = 'inserts/belly_band.txt';
+      // file_put_contents($file,$sql);
 
 
 
     }
-    //echo $sql . "<br/>";
+    echo $sql . "<br/>";
     //
     // $outputPath = "inserts/";
     // $append = "belly_band";
     // $fileType=".txt";
     //file_put_contents(($outputPath . $append . $fileType), $sql);
-  }
+//  }
 ?>
