@@ -10,29 +10,30 @@ For All:
   Save To File
 */
 
-$imageBlock = file_get_contents("flares/_defaults/image.html");
-$imageBlock = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/eb_placeholder.jpg', $imageBlock);
+function branded_belly_band(){
+  $imageBlock = file_get_contents("flares/_defaults/image.html");
+  $imageBlock = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/eb_placeholder.jpg', $imageBlock);
 
-foreach (glob("*/templates/*_branded.html") as $filename) {
-  $template = file_get_contents($filename);
+  foreach (glob("*/templates/*_branded.html") as $filename) {
+    $template = file_get_contents($filename);
 
-  $template = preg_replace('/\{.*?\}/ms', '', $template);
+    $template = preg_replace('/\{.*?\}/ms', '', $template);
 
-  $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
+    $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
 
-  $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $imageBlock . "<!-- User Content: Main Content End -->", $template);
+    $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $imageBlock . "<!-- User Content: Main Content End -->", $template);
 
-  $filename = preg_replace('/.*?\/.*?\//', '', $filename);
-  $filename = str_replace('.html', '', $filename);
+    $filename = preg_replace('/.*?\/.*?\//', '', $filename);
+    $filename = str_replace('.html', '', $filename);
 
-  print_r($output);
+    print_r($output);
 
-  $outputPath = "pre_made/branded_belly_band/";
-  $append = "_belly_band";
-  $fileType=".html";
+    $outputPath = "pre_made/branded_belly_band/";
+    $append = "_belly_band";
+    $fileType=".html";
 
-  print_r($outputPath . $filename . $append . $fileType);
-  file_put_contents(($outputPath . $filename . $append . $fileType), $output);
+    print_r($outputPath . $filename . $append . $fileType);
+    file_put_contents(($outputPath . $filename . $append . $fileType), $output);
+  }
 }
-
  ?>
