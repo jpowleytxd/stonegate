@@ -1,4 +1,5 @@
 <?php
+function block_insertion(){
   // $dir = '/templates/*/templates/';
   $sql = null;
   foreach (glob("*/bespoke blocks/*.html") as $filename) {
@@ -30,18 +31,19 @@
       //echo $upperName . '<br/>';
 
       $sql .= "INSERT INTO `tbl_template_editor_blocks` (`block_name`, `block_account_id`, `block_type_id`, `block_type`, `block_html`, `block_category`) VALUES
-              ('" . $upperName . "', '1222', 'stonegate_" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $folder . "');"  . "<br/><br/>";
+              ('" . $upperName . "', '1222', 'stonegate_" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $folder . "');"  . PHP_EOL;
 
-      //$file = 'compiled/blocks/' . $lowerName . '.txt';
-      //file_put_contents($file, $sql);
+      $file = 'inserts/bespoke_blocks.txt';
+      file_put_contents($file, $sql);
 
 
 
     }
-    echo $sql . "<br/>";
+    //echo $sql . "<br/>";
 
   //  $outputPath = "inserts/";
   //  $append = "bespoke_blocks";
   //  $fileType=".txt";
     //file_put_contents(($outputPath . $append . $fileType), $sql);
+  }
 ?>
