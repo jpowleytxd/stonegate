@@ -6,7 +6,9 @@
       $temp = file_get_contents($filename);
       //print_r($filename . "<br/>");
       $temp = preg_replace('/\{.*?\}/ms', '', $temp);
+      $temp = preg_replace('/\<!--.*?\-->/ms', '', $temp);
       // var_dump($temp);
+      //echo $temp;
       $temp = base64_encode($temp);
 
       $category = preg_replace('/(.*?\/.*?\/.*?)(_branded|_venue)(.html)/', '$2', $filename);
