@@ -76,7 +76,7 @@ function nameCheck($name){
 
 function getURL($serverName){
   $urlStart = 'http://img2.email2inbox.co.uk/2017/stonegate/01/promo/';
-  $urlEnd = '/woo-woo.png';
+  $urlEnd = '/sourz.png';
 
   if(($serverName === 'finnegans_wake') || ($serverName === 'rosies') || ($serverName === 'two_brewers')){
     return $urlStart . 'colors' . $urlEnd;
@@ -108,6 +108,21 @@ function marginBuilder($block){
 
   $block = $blockStart . $block .$blockEnd;
   return $block;
+}
+
+function lineSpacerBuild($parentFolder){
+  $spacer = file_get_contents('flares/_defaults/spacer.html');
+
+  $voucher = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_voucher.html');
+  preg_match('/BG Right: (.*)/', $voucher, $matches);
+  $color = $matches[1];
+
+  $style='border-top: 1px dotted ' . $color . ';';
+
+  $spacer = preg_replace('/background-color:.*?;/', '', $spacer);
+  $spacer = preg_replace('/border-top:.*?;/', $style, $spacer);
+
+  return $spacer;
 }
 
 function termsBuilder($terms){
@@ -355,11 +370,7 @@ function getStyle($brand){
     .gmail-fix { display: none !important;}
     .mob-spacer { height: 20px;}
     .mob-no-border { border:none!important; }
-  }}[style*=\'Oswald\'] { font-family: \'Oswald\',
-    sans-serif!important;
-  }[style*=\'lato\'] { font-family: \'lato\',
-    sans-serif!important;
-    }</style>';
+    }}</style>';
 
     if($brand === 'missoula'){
       return $missoula;
@@ -376,7 +387,6 @@ function htmlBuilder($content, $brand){
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link href="https://fonts.googleapis.com/css?family=lato:300,400" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Oswald:300,400" rel="stylesheet">
         ' . getStyle($brand) . '
       </head>
       <body>';
@@ -395,23 +405,22 @@ $rows = databaseQuery($initialQuery);
 
 $rowCount = null;
 
-$birthdayRows = array();
+$wifiRows = array();
 
 foreach($rows as $key => $row){
 
   foreach($row as $i => $single){
-    //var_dump($single);
 
     if($i === 0){
-      if(strpos($single, 'Birthday') !== false){
-        array_push($birthdayRows, $row);
+      if(strpos($single, 'WIFI sign') !== false){
+        array_push($wifiRows, $row);
         $rowCount++;
       }
     }
   }
 }
 
-//Birthday Rows Weel 1
+//Wifi Week 1
 foreach(glob("*/templates/*_branded.html") as $filename){
   $template = file_get_contents($filename);
   $parentFolder = preg_replace('/(.*?)\/.*/', '$1', $filename);
@@ -427,7 +436,7 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   //Prep Heading
   $heading = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_heading.html');
-  $heading = str_replace('Heading goes here', $birthdayRows[0][3], $heading);
+  $heading = str_replace('Heading goes here', $wifiRows[1][3], $heading);
   $heading = str_replace('align="left"', 'align="center"', $heading);
   $heading = marginBuilder($heading);
 
@@ -442,17 +451,18 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $promo = $image;
   $image = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/placeholder.jpg', $image);
 
-  //Prep Spacer
+  //Prep Spacers
   $emptySpacer = file_get_contents('basic-spacer.html');
   $largeSpacer = str_replace('<td align="center" height="20" valign="middle"></td>', '<td align="center" height="40" valign="middle"></td>', $emptySpacer);
+  $lineSpacer = lineSpacerBuild($parentFolder);
 
   //Prep All Text
   $basicText = file_get_contents('flares/_defaults/text.html');
   $textOne = $textTwo = $basicText;
 
   //Prep Text One
-  $birthdayRows[0][4] = str_replace('"', '', $birthdayRows[0][4]);
-  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[0][4], $textOne);
+  $wifiRows[1][4] = str_replace('"', '', $wifiRows[1][4]);
+  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[1][4], $textOne);
   //$textOne = str_replace('"', '', $textOne);
   $textOne = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textOne);
 
@@ -467,19 +477,9 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $promo = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', $url, $promo);
   $promo = marginBuilder($promo);
 
-
-  //Prep Voucher
-  $voucherInstructions = $birthdayRows[0][9];
-
-  $voucher = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_voucher.html');
-  $voucherSearch = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-  $voucher = str_replace($voucherSearch, $voucherInstructions, $voucher);
-
-  $voucher = marginBuilder($voucher);
-
   //Prep Text Two
-  $birthdayRows[0][7] = str_replace('"', '', $birthdayRows[0][7]);
-  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[0][7], $textTwo);
+  $wifiRows[1][7] = str_replace('"', '', $wifiRows[1][7]);
+  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[1][7], $textTwo);
   $textTwo = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textTwo);
 
   $styleInsert = 'style="color: ' . $textColor . ';font-weight: bold; font-family: arial;"';
@@ -494,13 +494,13 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $textColor = textColor($color);
   //print($textColor . '<br/>');
 
-  $terms = termsBuilder($birthdayRows[0][8]);
+  $terms = termsBuilder($wifiRows[1][8]);
   $styleInsert = 'style="font-size: 11px; color: ' . $textColor . '"';
   $terms = preg_replace('/<td valign="top">/', '<td valign="top" align="center" ' . $styleInsert . '>', $terms);
 
   // print($terms);
 
-  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne . $emptySpacer . $promo .  $largeSpacer . $voucher . $largeSpacer . $textTwo . $largeSpacer;
+  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne . $emptySpacer . $promo . $emptySpacer . $lineSpacer . $emptySpacer . $textTwo . $largeSpacer;
 
   $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
   $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $insert . "<!-- User Content: Main Content End -->", $template);
@@ -516,7 +516,7 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   print_r($output);
 }
 
-//Birthday Rows Week - 2
+//Wifi Week 2
 foreach(glob("*/templates/*_branded.html") as $filename){
   $template = file_get_contents($filename);
   $parentFolder = preg_replace('/(.*?)\/.*/', '$1', $filename);
@@ -532,7 +532,7 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   //Prep Heading
   $heading = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_heading.html');
-  $heading = str_replace('Heading goes here', $birthdayRows[1][3], $heading);
+  $heading = str_replace('Heading goes here', $wifiRows[2][3], $heading);
   $heading = str_replace('align="left"', 'align="center"', $heading);
   $heading = marginBuilder($heading);
 
@@ -547,17 +547,18 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $promo = $image;
   $image = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/placeholder.jpg', $image);
 
-  //Prep Spacer
+  //Prep Spacers
   $emptySpacer = file_get_contents('basic-spacer.html');
   $largeSpacer = str_replace('<td align="center" height="20" valign="middle"></td>', '<td align="center" height="40" valign="middle"></td>', $emptySpacer);
+  $lineSpacer = lineSpacerBuild($parentFolder);
 
   //Prep All Text
   $basicText = file_get_contents('flares/_defaults/text.html');
   $textOne = $textTwo = $basicText;
 
   //Prep Text One
-  $birthdayRows[1][4] = str_replace('"', '', $birthdayRows[1][4]);
-  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[1][4], $textOne);
+  $wifiRows[2][4] = str_replace('"', '', $wifiRows[2][4]);
+  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[2][4], $textOne);
   //$textOne = str_replace('"', '', $textOne);
   $textOne = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textOne);
 
@@ -572,19 +573,9 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $promo = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', $url, $promo);
   $promo = marginBuilder($promo);
 
-
-  //Prep Voucher
-  $voucherInstructions = $birthdayRows[1][9];
-
-  $voucher = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_voucher.html');
-  $voucherSearch = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-  $voucher = str_replace($voucherSearch, $voucherInstructions, $voucher);
-
-  $voucher = marginBuilder($voucher);
-
   //Prep Text Two
-  $birthdayRows[1][7] = str_replace('"', '', $birthdayRows[1][7]);
-  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[1][7], $textTwo);
+  $wifiRows[2][7] = str_replace('"', '', $wifiRows[1][7]);
+  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[2][7], $textTwo);
   $textTwo = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textTwo);
 
   $styleInsert = 'style="color: ' . $textColor . ';font-weight: bold; font-family: arial;"';
@@ -599,13 +590,13 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $textColor = textColor($color);
   //print($textColor . '<br/>');
 
-  $terms = termsBuilder($birthdayRows[1][8]);
+  $terms = termsBuilder($wifiRows[2][8]);
   $styleInsert = 'style="font-size: 11px; color: ' . $textColor . '"';
   $terms = preg_replace('/<td valign="top">/', '<td valign="top" align="center" ' . $styleInsert . '>', $terms);
 
   // print($terms);
 
-  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne . $emptySpacer . $promo .  $largeSpacer . $voucher . $largeSpacer . $textTwo . $largeSpacer;
+  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne . $emptySpacer . $promo . $emptySpacer . $lineSpacer . $emptySpacer . $textTwo . $largeSpacer;
 
   $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
   $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $insert . "<!-- User Content: Main Content End -->", $template);
@@ -621,7 +612,7 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   print_r($output);
 }
 
-//Birthday Rows Week - 6
+//Wifi Week 2
 foreach(glob("*/templates/*_branded.html") as $filename){
   $template = file_get_contents($filename);
   $parentFolder = preg_replace('/(.*?)\/.*/', '$1', $filename);
@@ -637,7 +628,7 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   //Prep Heading
   $heading = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_heading.html');
-  $heading = str_replace('Heading goes here', $birthdayRows[2][3], $heading);
+  $heading = str_replace('Heading goes here', $wifiRows[3][3], $heading);
   $heading = str_replace('align="left"', 'align="center"', $heading);
   $heading = marginBuilder($heading);
 
@@ -649,9 +640,10 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   //Prep Image
   $image = file_get_contents('flares/_defaults/image.html');
+  $promo = $image;
   $image = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://img2.email2inbox.co.uk/2016/stonegate/templates/placeholder.jpg', $image);
 
-  //Prep Spacer
+  //Prep Spacers
   $emptySpacer = file_get_contents('basic-spacer.html');
   $largeSpacer = str_replace('<td align="center" height="20" valign="middle"></td>', '<td align="center" height="40" valign="middle"></td>', $emptySpacer);
 
@@ -660,8 +652,8 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $textOne = $textTwo = $basicText;
 
   //Prep Text One
-  $birthdayRows[2][4] = str_replace('"', '', $birthdayRows[2][4]);
-  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[2][4], $textOne);
+  $wifiRows[3][4] = str_replace('"', '', $wifiRows[3][4]);
+  $textOne = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[3][4], $textOne);
   //$textOne = str_replace('"', '', $textOne);
   $textOne = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textOne);
 
@@ -671,12 +663,8 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $textOne = str_replace('<tr>', '<tr><td align="center" width="30"></td>', $textOne);
   $textOne = str_replace('</tr>', '<td align="center" width="30"></td></tr>', $textOne);
 
-  //Prep Promo Image
-  $url = getURL($serverName);
-
-
   //Prep Voucher
-  $voucherInstructions = $birthdayRows[1][9];
+  $voucherInstructions = $wifiRows[2][9];
 
   $voucher = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_voucher.html');
   $voucherSearch = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -685,8 +673,8 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $voucher = marginBuilder($voucher);
 
   //Prep Text Two
-  $birthdayRows[2][7] = str_replace('"', '', $birthdayRows[2][7]);
-  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $birthdayRows[2][7], $textTwo);
+  $wifiRows[3][7] = str_replace('"', '', $wifiRows[1][7]);
+  $textTwo = str_replace('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales vehicula tellus pellentesque malesuada. Integer malesuada magna felis, id rutrum leo volutpat eget. Morbi finibus et diam in placerat. Suspendisse magna enim, pharetra at erat vel, consequat facilisis mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla est velit, lobortis eu tincidunt sit amet, semper et lorem.', $wifiRows[3][7], $textTwo);
   $textTwo = preg_replace('/##(.+?)##/m', '<p>$1</p>', $textTwo);
 
   $styleInsert = 'style="color: ' . $textColor . ';font-weight: bold; font-family: arial;"';
@@ -701,13 +689,13 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $textColor = textColor($color);
   //print($textColor . '<br/>');
 
-  $terms = termsBuilder($birthdayRows[2][8]);
+  $terms = termsBuilder($wifiRows[3][8]);
   $styleInsert = 'style="font-size: 11px; color: ' . $textColor . '"';
   $terms = preg_replace('/<td valign="top">/', '<td valign="top" align="center" ' . $styleInsert . '>', $terms);
 
   // print($terms);
 
-  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne .  $largeSpacer . $voucher . $largeSpacer . $textTwo . $largeSpacer;
+  $insert = $image . $largeSpacer . $heading . $emptySpacer . $textOne . $emptySpacer . $voucher . $emptySpacer . $textTwo . $largeSpacer;
 
   $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
   $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $insert . "<!-- User Content: Main Content End -->", $template);
@@ -722,5 +710,4 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   print_r($output);
 }
-
-?>
+ ?>

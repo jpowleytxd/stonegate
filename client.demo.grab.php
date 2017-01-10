@@ -18,7 +18,7 @@ foreach($brands as $key => $brand){
   $html = 'http://clientdemos.txdlimited.co.uk/2016/stonegate/compiled/' . $brand . '/welcome_3_plus_21_days.html';
 
   $page = file_get_contents($html);
-  print_r($html . '<br/>');
+  print_r($page);
 }
 
  ?>
