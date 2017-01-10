@@ -513,6 +513,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   $output = htmlBuilder($output, $parentFolder);
 
+  $outputPath = "client.demo/wifi/1-day/";
+  $append = "_wifi_1";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
+
   print_r($output);
 }
 
@@ -608,6 +614,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $output = preg_replace('/\<!--.*?\-->/ms', '', $output);
 
   $output = htmlBuilder($output, $parentFolder);
+
+  $outputPath = "client.demo/wifi/7-day/";
+  $append = "_wifi_7";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
 
   print_r($output);
 }
@@ -707,6 +719,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $output = preg_replace('/\<!--.*?\-->/ms', '', $output);
 
   $output = htmlBuilder($output, $parentFolder);
+
+  $outputPath = "client.demo/wifi/21-day/";
+  $append = "_wifi_21";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
 
   print_r($output);
 }

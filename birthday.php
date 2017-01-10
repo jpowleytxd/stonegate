@@ -513,6 +513,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   $output = htmlBuilder($output, $parentFolder);
 
+  $outputPath = "client.demo/birthdays/1-week/";
+  $append = "_birthday_1";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
+
   print_r($output);
 }
 
@@ -618,6 +624,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   $output = htmlBuilder($output, $parentFolder);
 
+  $outputPath = "client.demo/birthdays/3-week/";
+  $append = "_birthday_3";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
+
   print_r($output);
 }
 
@@ -719,6 +731,12 @@ foreach(glob("*/templates/*_branded.html") as $filename){
   $output = preg_replace('/\<!--.*?\-->/ms', '', $output);
 
   $output = htmlBuilder($output, $parentFolder);
+
+  $outputPath = "client.demo/birthdays/6-week/";
+  $append = "_birthday_6";
+  $fileType=".html";
+
+  file_put_contents(($outputPath . $parentFolder . $append . $fileType), $output);
 
   print_r($output);
 }
