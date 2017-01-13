@@ -77,10 +77,7 @@ function marginBuilder($block){
 }
 
 //http://placehold.it/640x360
-
-$column = file_get_contents("flares/_defaults/1column.html");
-$imageBlock = file_get_contents("flares/_defaults/image.html");
-$imageBlock = str_replace('http://img2.email2inbox.co.uk/editor/fullwidth.jpg', 'http://placehold.it/640x360', $imageBlock);
+//http://placehold.it/320x180
 
 foreach (glob("*/templates/*_branded.html") as $filename) {
   $template = file_get_contents($filename);
@@ -88,40 +85,19 @@ foreach (glob("*/templates/*_branded.html") as $filename) {
 
   $serverName = nameCheck($parentFolder);
 
-  preg_match('/"contentBackground": "(.*)"/', $template, $matches, PREG_OFFSET_CAPTURE);
-  $color = $matches[1][0];
-  $textColor = textColor($color);
+  $oneCol = file_get_contents($parentFolder . "\/bespoke blocks\/" . $parentFolder . "_1_col.html");
+  $oneCol = preg_replace('/href="http:\/\/www\.abcd\.com\/"/', 'href=""', $oneCol);
+  $oneCol = preg_replace('/http:\/\/img2\.email2inbox\.co\.uk\/editor\/fullwidth\.jpg/', 'http://placehold.it/640x360', $oneCol);
 
-  //Prep Heading
-  $heading = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_heading.html');
-  $heading = str_replace('align="left"', 'align="center"', $heading);
-  $heading = marginBuilder($heading);
-
-  preg_match('/<h1.*?style="(.*?)".*?>/', $heading, $matches, PREG_OFFSET_CAPTURE);
-
-  $headingStyle = $matches[1][0];
-  $headingStyleNew = $headingStyle . ' font-size: 24px;';
-  $heading = str_replace($headingStyle, $headingStyleNew, $heading);
-
-  //Prep Spacer
-  $emptySpacer = file_get_contents('basic-spacer.html');
-  $largeSpacer = str_replace('<td align="center" height="20" valign="middle"></td>', '<td align="center" height="40" valign="middle"></td>', $emptySpacer);
-
-  //Prep All Text
-  $basicText = file_get_contents('flares/_defaults/text.html');
-  $styleInsert = 'style="color: ' . $textColor . ';font-weight: bold; font-family: arial;"';
-  $basicText = str_replace('<td class="text" align="left" valign="0">', '<td class="text" align="center" valign="0" ' . $styleInsert . '>', $basicText);
-  $basicText = str_replace('<tr>', '<tr><td align="center" width="30"></td>', $basicText);
-  $basicText = str_replace('</tr>', '<td align="center" width="30"></td></tr>', $basicText);
-
-  $insert = $imageBlock . $emptySpacer . $heading . $emptySpacer . $basicText . $largeSpacer;
-
-  $column = preg_replace('/<!-- Insert -->/', $insert, $column);
+  $twoCol = file_get_contents($parentFolder . "\/bespoke blocks\/" . $parentFolder . "_2_col.html");
+  $twoCol = preg_replace('/href="http:\/\/www\.abcd\.com\/"/', 'href=""', $twoCol);
+  $twoCol = preg_replace('/http:\/\/img2\.email2inbox\.co\.uk\/editor\/fullwidth\.jpg/', 'http://placehold.it/320x180', $twoCol);
 
   $search = "/<!-- User Content: Main Content Start -->\s*<!-- User Content: Main Content End -->/";
-  $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $insert . "<!-- User Content: Main Content End -->", $template);
 
-  $append = "adhoc";
+  $output = preg_replace($search, "<!-- User Content: Main Content Start -->" . $oneCol . $twoCol . "<!-- User Content: Main Content End -->", $template);
+
+  $append = "newsletter";
 
   sendToFile($output, $append, $serverName);
 
