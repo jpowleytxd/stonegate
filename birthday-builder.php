@@ -230,11 +230,9 @@ foreach(glob("*/templates/*_branded.html") as $filename){
 
   //Prep Voucher
   $voucherInstructions = $birthdayRows[0][9];
-
   $voucher = file_get_contents($parentFolder . '/bespoke blocks/' . $parentFolder . '_voucher.html');
   $voucherSearch = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
   $voucher = str_replace($voucherSearch, $voucherInstructions, $voucher);
-
   $voucher = marginBuilder($voucher);
 
   //Prep Text Two

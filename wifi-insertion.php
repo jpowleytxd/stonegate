@@ -3,10 +3,10 @@
 ini_set('max_execution_time', 3000);
 
 function sendToFile($output, $append){
-  $send = true;
+  $send = false;
   if($send == true){
     $outputPath = "inserts/";
-    $fileType=".txt";
+    $fileType=".sql";
 
     file_put_contents(($outputPath . $append . $fileType), $output);
   }
@@ -154,6 +154,7 @@ foreach (glob("pre_made/*/branded/wifi*.html") as $filename) {
   //Remove comment tags
   $temp = preg_replace('/\{.*?\}/ms', '', $temp);
   $temp = preg_replace('/\<!--.*?\-->/ms', '', $temp);
+  $temp = preg_replace('/\'/ms', '\\\'', $temp);
   $temp = removeWhiteSpace($temp);
 
   //$temp = base64_encode($temp);

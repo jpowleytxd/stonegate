@@ -62,7 +62,7 @@ foreach (glob("*/templates/*_branded.html") as $filename) {
     //$name = $upperCaseName . ' - T:' . date("Ymd") . ' -  ' . $type;
 
     $sql .= "INSERT INTO `tbl_template_editor_templates` (`template_account_id`, `template_name`, `template_subject`, `template_html`, `template_text`, `template_created_datetime`, `template_type`, `template_image`, `template_status`) VALUES
-            ('1222', '" . $templateName . "', NULL, '" . $temp . "', NULL, NULL, '" . $templateName . "', NULL, '1');\n";
+            ('1222', '" . $templateName . "', NULL, '" . $temp . "', NULL, NULL, '" . $type . "', NULL, '1');\n";
   }
   $append = "template-insert";
 
