@@ -106,8 +106,8 @@ function databaseQuery2($query){
   }
 }
 
-function buildTemplateSettings($title, $preHeader, $subject, $profileID){
-  $settings = '{"emailName":"' . $title . '","textOnly":"","preheader":"' . $preHeader . '","h": -1369038629,"subject":"' . $subject . '","template": [[TEMPLATE_ID]],"senderProfile":' . $profileID . '}';
+function buildTemplateSettings($title, $preHeader, $subject, $brandID, $profileID){
+  $settings = '{"emailName":"' . $title . '","textOnly":"","preheader":"' . $preHeader . '","h": -1369038629,"subject":"' . $subject . '","template": "' . $brandID . '","senderProfile":' . $profileID . '}';
 
   return $settings;
 }
@@ -230,7 +230,7 @@ foreach (glob("pre_made/*/branded/welcome*.html") as $filename) {
       $voucher = '1';
     }
 
-    $settings = buildTemplateSettings($name, $preHeader, $subject, $profileID);
+    $settings = buildTemplateSettings($name, $preHeader, $subject, $brandID, $profileID);
     $mappings = buildTemplateMappings();
 
     if($type === 'Welcome 1 + 1 Day (Scot)'){

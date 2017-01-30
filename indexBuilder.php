@@ -1,26 +1,3 @@
-<?php
-function getURL($name){
-  if($name === 'halfway_heaven'){
-    $name = 'halfway_to_heaven';
-    return $name;
-  } else if($name === 'colors_basildon'){
-    $name = 'colors';
-    return $name;
-  } else if($name === 'duke_wellington'){
-    $name = 'duke_of_wellington';
-    return $name;
-  } else if($name === 'finnegans'){
-    $name = 'finnegans_wake';
-    return $name;
-  } else if($name === 'pit_pendulum'){
-    $name = 'pit_and_pendulum';
-    return $name;
-  } else{
-    return $name;
-  }
-}
- ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,20 +70,36 @@ function getURL($name){
 
 <?php
 
-foreach(glob("*/templates/*_branded.html") as $filename){
-  $template = file_get_contents($filename);
-  $parentFolder = preg_replace('/(.*?)\/.*/', '$1', $filename);
-  $parentFolder = getURL($parentFolder);
-  $title = preg_replace('/\_/', ' ', $parentFolder);
-  $title = ucwords($title);
-  print_r('<h1>' . $title . '</h1>');
-  print_r('<a href="compiled/' . $parentFolder . '/birthday_1_week.html">Birthday -1  Week</a>');
-  print_r('<a href="compiled/' . $parentFolder . '/birthday_3_weeks.html">Birthday -3  Week</a>');
-  print_r('<a href="compiled/' . $parentFolder . '/birthday_6_weeks.html">Birthday -6  Week</a>');
+foreach(glob("client.demo/*/") as $filename){
+  $parentFolder = preg_replace('/.*?\/(.*?)\//', '$1', $filename);
 
-  print_r('<a href="compiled/' . $parentFolder . '/wifi_1_day.html">WIFI Sign In 1 + 1 Day</a>');
-  print_r('<a href="compiled/' . $parentFolder . '/wifi_7_days.html">WIFI Sign In 1 + 7 Days</a>');
-  print_r('<a href="compiled/' . $parentFolder . '/wifi_21_days.html">WIFI Sign In 1 + 21 Days</a>');
+  $title = preg_replace('/_/', ' ', $parentFolder);
+  $title = ucwords($title);
+
+  print_r('<h1>' . $title . '</h1>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/password_reset.html">Forgotten Password</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/auto_welcome_uk.html">Auto Welcome - Immediate</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_1_day_uk.html">Welcome 1 + 1 Day</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_7_days_uk.html">Welcome 2 + 7 Days</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_21_days_uk.html">Welcome 3 + 21 Days</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/auto_welcome_scot.html">Auto Welcome - Immediate (Scot)</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_1_day_scot.html">Welcome 1 + 1 Day (Scot)</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_7_days_scot.html">Welcome 2 + 7 Days (Scot)</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/welcome_21_days_scot.html">Welcome 3 + 21 Days (Scot)</a>');
+
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/wifi_1_day.html">WiFi Sign In 1 Plus 1 Day</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/wifi_7_days.html">WiFi Sign In 2 Plus 7 Days</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/wifi_21_days.html">WiFi Sign In 3 Plus 21 Days</a>');
+
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/birthday_1_week.html">Birthday 1 Week</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/birthday_3_weeks.html">Birthday 3 Weeks</a>');
+	print_r('<a href="iteration_1/' . $parentFolder . '/branded/birthday_6_weeks.html">Birthday 6 Weeks</a>');
+
+  print_r('<a href="iteration_1/' . $parentFolder . '/branded/adhoc.html">Adhoc</a>');
+  print_r('<a href="iteration_1/' . $parentFolder . '/branded/belly_band.html">Belly Band</a>');
+  print_r('<a href="iteration_1/' . $parentFolder . '/branded/newsletter.html">Newsletter</a>');
+
+
 }
 
  ?>

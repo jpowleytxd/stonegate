@@ -12,6 +12,43 @@ function sendToFile($output, $append){
   }
 }
 
+function databaseQuery($query){
+  //Define Connection
+  static $connection;
+
+  //Attempt to connect to the database, if connection is yet to be established.
+  if(!isset($connection)){
+    //Load congig file
+    $config = parse_ini_file('config2.ini');
+    $connection = mysqli_connect('localhost', $config['username'], $config['password'], $config['dbname']);
+  }
+
+  //Arrays to store all retrieved records
+  $rows = array();
+  $result = null;
+
+  //Connection error handle
+  if($connection === false){
+    print('Connection Error');
+    return false;
+  } else{
+    //Query the database
+    $result = mysqli_query($connection, $query);
+
+    //IF query failed, return 'false'
+    if($result === false){
+      print('Query Failed');
+      return false;
+    }
+
+    //Fetch all the rows in the Array
+    while($row = mysqli_fetch_row($result)){
+      $rows[] = $row;
+    }
+    return $rows;
+  }
+}
+
 function nameCheck($name){
   if($name === 'halfway_heaven'){
     $name = 'halfway_to_heaven';
@@ -68,13 +105,31 @@ foreach (glob("*/bespoke blocks/*.html") as $filename) {
 
   $lowerName = 'stonegate_' . $parentFolder . '_' .  $lowerName;
 
+  $initialQuery = 'SELECT * FROM stonegate_lookup WHERE brand = "' . $upperCaseName . '"';
+
+  $rows = databaseQuery($initialQuery);
+
+  $accountID = null;
+  $profileID = null;
+  $brandID = null;
+  $venueID = null;
+  $veID = null;
+
+  foreach($rows as $key => $row){
+    $accountID = $row[2];
+    $profileID = $row[3];
+    $brandID = $row[4];
+    $venueID = $row[5];
+    $veID = $row[6];
+  }
+
   $blockName = $upperCaseName . ' ' . $blockType;
 
   $sql .= "INSERT INTO `tbl_template_editor_blocks` (`block_name`, `block_account_id`, `block_type_id`, `block_type`, `block_html`, `block_category`) VALUES
-          ('" . $blockName . "', '1222', '" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $upperCaseName . "');\n";
+          ('" . $blockName . "', '" . $veID . "', '" . $lowerName . "', 'bespoke', '" . $temp . "', '" . $upperCaseName . "');\n";
 }
 
-$append = "bespoke-block-insert";
+$append = "bespoke-block-insert-ind";
 
 sendToFile($sql, $append);
 
