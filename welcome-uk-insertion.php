@@ -219,7 +219,7 @@ foreach (glob("pre_made/*/branded/welcome*.html") as $filename) {
     if($type === 'Welcome 1 + 1 Day'){
       $subject = $welcomeRows[1][2];
       $preHeader = $welcomeRows[1][3];
-      $voucher = '0';
+      $voucher = '1';
     } else if($type === 'Welcome 2 + 7 Days'){
       $subject = $welcomeRows[2][2];
       $preHeader = $welcomeRows[2][3];
@@ -227,7 +227,7 @@ foreach (glob("pre_made/*/branded/welcome*.html") as $filename) {
     } else if($type === 'Welcome 3 + 21 Days'){
       $subject = $welcomeRows[3][2];
       $preHeader = $welcomeRows[3][3];
-      $voucher = '1';
+      $voucher = '0';
     }
 
     $settings = buildTemplateSettings($name, $preHeader, $subject, $brandID, $profileID);

@@ -227,7 +227,7 @@ foreach (glob("pre_made/*/branded/welcome*.html") as $filename) {
     } else if($type === 'Welcome 3 + 21 Days (Scot)'){
       $subject = $welcomeRows[3][2];
       $preHeader = $welcomeRows[3][3];
-      $voucher = '1';
+      $voucher = '0';
     }
 
     $settings = buildTemplateSettings($name, $preHeader, $subject, $brandID, $profileID);
